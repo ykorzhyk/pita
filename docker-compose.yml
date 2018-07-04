@@ -1,0 +1,38 @@
+version: '3.1'
+
+services:
+    postgres:
+        container_name: postgres
+        image: postgres
+        environment:
+            POSTGRES_PASSWORD: test
+            POSTGRES_USER: test
+            POSTGRES_DB: pita
+
+    generate_data:
+        container_name: generate_data
+        build:
+            context: ./
+        command:  /.env/bin/python /app_root/pita/generate.py
+        tty: true
+        environment:
+            PYTHONPATH: /app_root
+
+    agg_data:
+        container_name: agg_data
+        build:
+            context: ./
+        command:  /.env/bin/python /app_root/pita/aggregate.py
+        tty: true
+        environment:
+            PYTHONPATH: /app_root
+
+    check_agg:
+        container_name: check_agg
+        build:
+            context: ./
+        command:  /.env/bin/python /app_root/pita/check.py
+        tty: true
+        environment:
+            PYTHONPATH: /app_root
+
